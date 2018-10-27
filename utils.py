@@ -8,6 +8,13 @@ import speech_recognition as sr
 import datetime
 # Import for subprocesses to communicate with the terminal
 import subprocess
+# Import OS module for system functions
+import os
+
+CURR_PATH = subprocess.check_output("pwd", shell=True).strip().decode('ascii') + "/"
+FILEPATH = CURR_PATH + "temp/"
+if not os.path.exists(FILEPATH):
+	os.system("mkdir " + FILEPATH)
 
 # To save a base64 encoded string as a WAV
 def saveWAV(encoded_string):
