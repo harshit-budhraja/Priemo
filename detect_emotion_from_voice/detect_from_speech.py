@@ -6,17 +6,21 @@ import numpy as np
 import pandas as pd
 from keras.models import model_from_json
 from sklearn.preprocessing import LabelEncoder
+import subprocess
+import os
+
+CURR_PATH = subprocess.check_output("pwd", shell=True).strip().decode('ascii') + "/detect_emotion_from_voice/"
 
 def voice2emo(wav_path): #func takes input wav 
   #load the model
-  json_file = open('model.json', 'r')
+  json_file = open(CURR_PATH + 'model.json', 'r')
   loaded_model_json = json_file.read()
   json_file.close()
   loaded_model = model_from_json(loaded_model_json)
   # load weights into new model
-  loaded_model.load_weights("Emotion_Voice_Detection_Model.h5")
+  loaded_model.load_weights(CURR_PATH + "Emotion_Voice_Detection_Model.h5")
   print("Loaded model from disk")
-  
+
   opt = keras.optimizers.rmsprop(lr=0.00001, decay=1e-6)
   loaded_model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
 
@@ -34,7 +38,7 @@ def voice2emo(wav_path): #func takes input wav
   liveabc = livepreds1.astype(int).flatten()
 
   #load the label encoder
-  pfile = open("labels921.pickle", 'rb')
+  pfile = open(CURR_PATH + "labels921.pickle", 'rb')
   labels = pickle.load(pfile)
   pfile.close()
 
@@ -50,6 +54,6 @@ def voice2emo(wav_path): #func takes input wav
 
   jsonOUT = json.dumps(jdata)
 
-  with open('JSON_S2E.json', 'w') as f:
+  with open(CURR_PATH + 'JSON_S2E.json', 'w') as f:
     json.dump(jsonOUT, f)
   return jsonOUT

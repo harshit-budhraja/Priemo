@@ -2,6 +2,7 @@ from flask import Flask, redirect, jsonify, request, render_template
 from flask_cors import CORS
 import json
 import utils
+import brain
 
 app = Flask(__name__)
 CORS(app)
@@ -14,7 +15,8 @@ def webhook():
 		text_output = utils.speechToText(wav_output)
 		if text_output != "":
 			utils.saveText(text_output)
-		return jsonify({"response": "true"})
+		brain.getEmotionFromVoice(wav_output)
+	return jsonify({"response": "true"})
 
 if __name__ == '__main__':
 	app.run()

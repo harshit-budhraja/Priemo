@@ -1,4 +1,3 @@
 rm *.pyc 
-rm temp/*.wav
-rm temp/*.txt 
+rm -rf temp/
 rm .DS_Store
