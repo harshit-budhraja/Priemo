@@ -13,17 +13,19 @@ CURR_PATH = subprocess.check_output("pwd", shell=True).strip().decode('ascii') +
 
 def voice2emo(wav_path): #func takes input wav 
   #load the model
-  json_file = open(CURR_PATH + 'model.json', 'r')
-  loaded_model_json = json_file.read()
-  json_file.close()
-  loaded_model = model_from_json(loaded_model_json)
-  # load weights into new model
-  loaded_model.load_weights(CURR_PATH + "Emotion_Voice_Detection_Model.h5")
-  #print("Loaded model from disk")
-
-  opt = keras.optimizers.rmsprop(lr=0.00001, decay=1e-6)
-  loaded_model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
-
+  try:
+    json_file = open(CURR_PATH + 'model.json', 'r')
+    loaded_model_json = json_file.read()
+    json_file.close()
+    loaded_model = model_from_json(loaded_model_json)
+    # load weights into new model
+    loaded_model.load_weights(CURR_PATH + "Emotion_Voice_Detection_Model.h5")
+    #print("Loaded model from disk")
+    opt = keras.optimizers.rmsprop(lr=0.00001, decay=1e-6)
+    loaded_model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
+  except:
+    pass
+  
   #load the input wav file and preprocess
   X, sample_rate = librosa.load(wav_path, res_type='kaiser_fast',duration=2.5,sr=22050*2,offset=0.5)
   sample_rate = np.array(sample_rate)
