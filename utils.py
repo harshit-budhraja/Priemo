@@ -10,24 +10,34 @@ import datetime
 import subprocess
 # Import OS module for system functions
 import os
+# For calling UNIX Shell utilities
+import shutil
 
 CURR_PATH = subprocess.check_output("pwd", shell=True).strip().decode('ascii') + "/"
 FILEPATH = CURR_PATH + "temp/"
 if not os.path.exists(FILEPATH):
 	os.system("mkdir " + FILEPATH)
 
-# To save a base64 encoded string as a WAV
-def saveWAV(encoded_string):
-	CURR_PATH = subprocess.check_output("pwd", shell=True).strip().decode('ascii') + "/"
+# Pass the audio data to an encoding function.
+def encode_audio(audio):
+	audio_content = audio.read()
+	return base64.b64encode(audio_content)
+
+# Pass the encoded text data to a decoding function
+def decode_audio(encoded_text):
+	return base64.b64decode(encoded_text)
+
+# Get a unique file name for audio saving
+def getFileName():
 	NOW = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 	FILENAME = "audio-" + NOW + ".wav"
+	return (FILENAME)
+
+def moveToTemp(file):
+	CURR_PATH = subprocess.check_output("pwd", shell=True).strip().decode('ascii') + "/"
 	FILEPATH = CURR_PATH + "temp/"
-	try:
-		outfile = open(FILEPATH + FILENAME, 'wb')
-		outfile.write(codecs.decode(encoded_string, 'base64'))
-		return (FILEPATH + FILENAME)
-	except:
-		return ""
+	shutil.move(CURR_PATH + "/" + file, FILEPATH + file)
+	return (FILEPATH + file)
 
 
 # To convert the speech (from audio signals) to text using Google's Engine
@@ -39,8 +49,8 @@ def speechToText(filepath):
 		infile.close()
 		try:
 			return r.recognize_google(audio)
-		except sr.UnknownValueError:
-			print("[ERROR] Google Speech Recognition could not understand the input audio.")
+		except sr.UnknownValueError as e:
+			print("[ERROR] Google Speech Recognition could not understand the input audio; {0}".format(e))
 			return ""
 		except sr.RequestError as e:
 			print("[ERROR] Could not request results from Google Speech Recognition service; {0}".format(e))
@@ -58,6 +68,7 @@ def saveText(text):
 		outfile.write(text)
 		outfile.close()
 		return (FILEPATH + FILENAME)
-	except:
+	except Exception as e:
+		print(e)
 		return ""
 

@@ -1,5 +1,6 @@
 from flask import Flask, redirect, jsonify, request, render_template
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
 import json
 import utils
 import brain
@@ -9,13 +10,14 @@ CORS(app)
 
 @app.route('/prioritise', methods=['POST'])
 def webhook():
-	req = request.get_json(silent=True, force=True)
-	wav_output = utils.saveWAV(req['encoded'])
-	if wav_output != "":
-		text_output = utils.speechToText(wav_output)
-		if text_output != "":
-			utils.saveText(text_output)
-		brain.getEmotionFromVoice(wav_output)
+	if request.method == "POST":
+		file = request.files['audio']
+		print(file)
+		fname = utils.getFileName()
+		file.save(secure_filename(fname))
+		tempaudio = utils.moveToTemp(fname)
+		if tempaudio != "":
+			brain.getEmotionFromVoice(tempaudio)
 	return jsonify({"response": "true"})
 
 if __name__ == '__main__':
