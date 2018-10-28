@@ -1,0 +1,46 @@
+body {
+  padding-top: 0px;
+}
+
+.fa-microphone {
+  color: #FFFFFF;
+  background: #ff7b54;
+  padding: 0.2em 0.4em;
+}
+
+.recording {
+  animation: pulse 1s ease infinite;
+  background: #38c1b8;
+  /* transition: transform 0.2s; */
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+i.boxed {
+        font-size: 64px;
+        border: 1px solid #ccc;
+        padding: 1em;
+        border-radius: 8px;
+        margin-bottom: 12px;
+}
+
+.voice-btn {
+	margin-top: 150px;
+}
+
+.rec-btn {
+	margin-top: 10px;
+	margin-left: 15px;
+}

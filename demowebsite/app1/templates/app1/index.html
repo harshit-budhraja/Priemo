@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+	<title>Priemo Demo | Hack Moscow 2.0, Moscow, Russia</title>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+	<link rel="stylesheet" href="/static/style.css">
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+<!-- Navbar content -->
+
+<div class="container">
+	<a class="navbar-brand" href="#">Priemo {Priority + Emotions}</a>
+</div>
+</nav>
+<div class="jumbotron">
+<div class="container">
+  <div class="col-lg-6 voice-btn">
+			<i class="boxed fa fa-microphone" id="voice_btn"></i>
+	</div>
+
+	<input type="text" class="form-control" id="name" placeholder="Name">
+	<!-- <input type="text" class="form-control" id="location" placeholder="Location"> -->
+	<a href="{% url 'index2' %}"><button id="rec_btn" type="button" class="btn btn-dark btn-lg rec-btn" onclick="toggleRecording()">Start Recording</button></a>
+	<br><br>
+	<div id="myOutput"><h4>You Said: {{ text }}</h4></div>
+</div><!-- /.container -->
+
+<div class="vl"></div>
+
+<div class="container" id="preferenceTable">
+	<h2>Waiting Queue</h2>
+  <table class="table table-hover table-dark">
+    <thead>
+      <tr>
+				<th>Name</th>
+				<!-- <th>Location</th> -->
+        <th>Priority</th>
+      </tr>
+    </thead>
+    <tbody>
+			{% for name, priority in userData %}
+      <tr>
+				<td>{{ name }}</td>
+        <!-- <td>New York</td> -->
+        <td>{{ priority }}</td>
+			</tr>
+			{% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+<script>
+	function toggleRecording() {
+		var voice_btn = document.getElementById("voice_btn");
+		var rec_btn = document.getElementById("rec_btn");
+		if(voice_btn.classList.contains("recording")) 
+		{
+				voice_btn.classList.remove("recording");
+				rec_btn.innerHTML = "Start Recording";
+		}
+		else 
+		{
+			voice_btn.classList.add("recording");
+			rec_btn.innerHTML = "Stop Recording";
+		}
+	}
+</script>
+</body>
+</html>
