@@ -1,9 +1,5 @@
-# Import for codecs encoding-decoding (base64)
-import codecs
 # Import for handling json
 import json
-# Import from speech to text engine
-import speech_recognition as sr
 # Import for getting system datetime
 import datetime
 # Import for subprocesses to communicate with the terminal
@@ -12,11 +8,19 @@ import subprocess
 import os
 # For calling UNIX Shell utilities
 import shutil
+from watson_developer_cloud import SpeechToTextV1
+from watson_developer_cloud.websocket import RecognizeCallback, AudioSource
+from os.path import join, dirname
 
 CURR_PATH = subprocess.check_output("pwd", shell=True).strip().decode('ascii') + "/"
 FILEPATH = CURR_PATH + "temp/"
 if not os.path.exists(FILEPATH):
 	os.system("mkdir " + FILEPATH)
+service = SpeechToTextV1(
+    username='17e91a4d-b13b-4860-933e-434d92cf8cce',
+    password='4crAinRbKs5y',
+    url='https://stream.watsonplatform.net/speech-to-text/api'
+)
 
 # Pass the audio data to an encoding function.
 def encode_audio(audio):
@@ -42,19 +46,21 @@ def moveToTemp(file):
 
 # To convert the speech (from audio signals) to text using Google's Engine
 def speechToText(filepath):
-	r = sr.Recognizer()
-	infile = open(filepath, "r")
-	with sr.AudioFile(infile) as source:
-		audio = r.record(source)
-		infile.close()
-		try:
-			return r.recognize_google(audio)
-		except sr.UnknownValueError as e:
-			print("[ERROR] Google Speech Recognition could not understand the input audio; {0}".format(e))
-			return ""
-		except sr.RequestError as e:
-			print("[ERROR] Could not request results from Google Speech Recognition service; {0}".format(e))
-			return ""
+	with open(join(dirname(__file__), filepath),'rb') as audio_file:
+		res = json.dumps(
+		    service.recognize(
+		        audio=audio_file,
+		        content_type='audio/wav',
+		        timestamps=False,
+		        word_confidence=False).get_result(),
+		    indent=1)
+
+		d = json.loads(res)
+		output = ""
+		#print(len(d["results"]))
+		for i in range(0, len(d["results"])):
+		    output += d["results"][i]["alternatives"][0]["transcript"]
+		return output
 
 
 # To save the text to the temps/ directory

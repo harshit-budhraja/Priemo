@@ -19,7 +19,7 @@ def voice2emo(wav_path): #func takes input wav
   loaded_model = model_from_json(loaded_model_json)
   # load weights into new model
   loaded_model.load_weights(CURR_PATH + "Emotion_Voice_Detection_Model.h5")
-  print("Loaded model from disk")
+  #print("Loaded model from disk")
 
   opt = keras.optimizers.rmsprop(lr=0.00001, decay=1e-6)
   loaded_model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
