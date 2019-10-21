@@ -29,7 +29,7 @@ librosa==0.6.2
 llvmlite==0.25.0
 Markdown==3.0.1
 MarkupSafe==1.0
-nltk==3.3
+nltk==3.4.5
 numba==0.40.1
 numpy==1.15.3
 oauth2client==3.0.0
