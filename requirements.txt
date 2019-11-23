@@ -42,7 +42,7 @@ Pyrebase==3.0.27
 python-dateutil==2.7.5
 python-jwt==2.0.1
 pytz==2018.6
-PyYAML==3.13
+PyYAML==5.1
 requests==2.11.1
 requests-toolbelt==0.7.0
 resampy==0.2.1
